@@ -11,7 +11,7 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-st.markdown("<h3>1. Generando Dataframes</h3>", unsafe_allow_html=True)
+st.markdown("<h3>1. Tablas de Dimensión y Hechos</h3>", unsafe_allow_html=True)
 
 
 fechas = np.arange("2024-01-01", "2026-08-01", dtype="<M8[M]")
@@ -280,3 +280,91 @@ with st.expander("Click para ver el contenido"):
     ax.set_title("Análisis de Notas por Curso", fontweight=600, fontsize=16)
     plt.tight_layout()
     st.pyplot(fig)
+
+st.markdown(
+    "<h3>8. Mapa de Calor Alumno por Curso (Heatmap)</h3>", unsafe_allow_html=True
+)
+with st.expander("Click para ver el contenido"):
+    st.code(
+        """
+        fig, ax = plt.subplots(figsize=(8, 8))
+        sns.heatmap(df_pivot, 
+                    ax=ax, 
+                    cmap="RdYlGn", 
+                    fmt=".1f", 
+                    annot=True)
+        ax.set_title("Mapa de calor (Alumnos por Curso)", 
+                    fontweight=600, 
+                    fontsize=16)
+        ax.set_xlabel("Cursos",fontweight=600)
+        ax.set_ylabel("Alumnos",fontweight=600)
+        plt.tight_layout()
+        st.pyplot(fig)
+        """,
+        language="python",
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 8))
+    sns.heatmap(df_pivot, ax=ax, cmap="RdYlGn", fmt=".1f", annot=True)
+    ax.set_title("Mapa de calor (Alumnos por Curso)", fontweight=600, fontsize=16)
+    ax.set_xlabel("Cursos", fontweight=600)
+    ax.set_ylabel("Alumnos", fontweight=600)
+    plt.tight_layout()
+    st.pyplot(fig)
+
+st.markdown("<h3>9. Evolución Temporal (Lineplot)</h3>", unsafe_allow_html=True)
+with st.expander("Click para ver el contenido"):
+    st.code(
+        """
+        aulas2 = sorted(df_merge["Aula"].unique().tolist())
+        aulas_selecionadas2 = st.multiselect(
+            "Seleciona Aula", 
+            options=aulas2, 
+            default=aulas2, 
+            key="Filtro_aulas_line"
+        )
+        if aulas_selecionadas2:
+            df_merge_filtrado = df_merge.loc[df_merge["Aula"]
+                                .isin(aulas_selecionadas2)]
+            df_tiempo = (
+                df_merge_filtrado.groupby("Id_Fecha")
+                                .agg({"Nota": "mean"})
+                                .reset_index()
+            )
+            fig, ax = plt.subplots(figsize=(8, 5))
+            sns.lineplot(df_tiempo, 
+                        x="Id_Fecha", 
+                        y="Nota")
+            plt.xticks(rotation=90)
+            ax.set_title("Tendencia de Notas", 
+                        fontsize=16, 
+                        fontweight=600)
+            ax.set_xlabel("Fechas", 
+                        fontweight=600)
+            ax.set_ylabel("Notas", 
+                        fontweight=600)
+            plt.tight_layout()
+            st.pyplot(fig)
+        else:
+            st.warning("Selecciona al menos una opción")
+        """
+    )
+    aulas2 = sorted(df_merge["Aula"].unique().tolist())
+    aulas_selecionadas2 = st.multiselect(
+        "Seleciona Aula", options=aulas2, default=aulas2, key="Filtro_aulas_line"
+    )
+    if aulas_selecionadas2:
+        df_merge_filtrado = df_merge.loc[df_merge["Aula"].isin(aulas_selecionadas2)]
+        df_tiempo = (
+            df_merge_filtrado.groupby("Id_Fecha").agg({"Nota": "mean"}).reset_index()
+        )
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.lineplot(df_tiempo, x="Id_Fecha", y="Nota")
+        plt.xticks(rotation=90)
+        ax.set_title("Tendencia de Notas", fontsize=16, fontweight=600)
+        ax.set_xlabel("Fechas", fontweight=600)
+        ax.set_ylabel("Notas", fontweight=600)
+        plt.tight_layout()
+        st.pyplot(fig)
+    else:
+        st.warning("Selecciona al menos una opción")
