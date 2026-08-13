@@ -252,12 +252,31 @@ st.markdown(
     "<h3>7. Comparativo de Notas por Curso (Boxplot)</h3>", unsafe_allow_html=True
 )
 with st.expander("Click para ver el contenido"):
+    st.code(
+        """
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.boxplot(df_merge, 
+                    x="Curso", 
+                    y="Nota", 
+                    ax=ax, 
+                    color="steelblue")
+        plt.xticks(rotation=60)
+        ax.set_ylabel("Notas",fontweight=600)
+        ax.set_xlabel("Cursos",fontweight=600)
+        ax.set_title("Análisis de Notas por Curso", 
+                    fontweight=600, 
+                    fontsize=16)
+        plt.tight_layout()
+        st.pyplot(fig)
+        """,
+        language="python",
+    )
+
     fig, ax = plt.subplots(figsize=(8, 5))
     sns.boxplot(df_merge, x="Curso", y="Nota", ax=ax, color="steelblue")
     plt.xticks(rotation=60)
-    ax.set_ylabel("Notas",fontweight=600)
-    ax.set_xlabel("Cursos",fontweight=600)
+    ax.set_ylabel("Notas", fontweight=600)
+    ax.set_xlabel("Cursos", fontweight=600)
     ax.set_title("Análisis de Notas por Curso", fontweight=600, fontsize=16)
     plt.tight_layout()
-    st.code("""""", language="python")
     st.pyplot(fig)
