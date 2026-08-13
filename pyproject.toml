@@ -1,0 +1,19 @@
+[project]
+name = "mi-proyecto"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.5.2",
+    "pandas>=3.0.5",
+    "seaborn>=0.13.2",
+    "streamlit>=1.61.1",
+]
+
+[project.scripts]
+mi-proyecto = "mi_proyecto:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
