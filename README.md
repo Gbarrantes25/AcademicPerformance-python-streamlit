@@ -54,8 +54,8 @@ Este proyecto transforma un modelo de datos dimensional (calendario, alumnos, cu
 ## 🖼️ Vistas Previas del proyecto
 <details>
   <summary>Dashboard</summary>
-  <!-- Agregar aquí capturas o GIF del dashboard, por ejemplo: -->
-  <!-- <img width="1777" height="978" alt="image" src="URL_DE_LA_IMAGEN" /> -->
+    <img width="1300" height="958" alt="image" src="https://github.com/user-attachments/assets/96720cad-fe68-40bf-ab9d-2361c6f01d62" />
+    <img width="1368" height="1079" alt="image" src="https://github.com/user-attachments/assets/6d58778a-c468-4f77-b680-8ee42cd5a99c" />
 </details>
 
 ## 👤 Autor
