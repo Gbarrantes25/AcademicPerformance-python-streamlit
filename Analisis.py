@@ -474,32 +474,51 @@ st.markdown(
 with st.expander("Click para ver el contenido"):
     st.code(
         """
-        df_merge["Estado"] = np.where(df_merge["Nota"] >= 13, 
-                        "Aprobado", 
-                        "Desaprobado")
-        fig, ax = plt.subplots(figsize=(8, 5))
-        sns.countplot(df_merge, 
-                        x="Curso", 
-                        hue="Estado", 
-                        ax=ax)
-        plt.xticks(rotation=60)
-        plt.tight_layout()
-        ax.set_title("Aprobados vs Desaprobados", 
-                        fontsize=16, 
-                        fontweight=800)
-        ax.set_xlabel("Cursos", 
-                        fontweight=700)
-        ax.set_ylabel("Conteo", 
-                        fontweight=700)
-        st.pyplot(fig)
+        if aulas_selecionadas3:
+            df_merge["Estado"] = np.where(df_merge["Nota"] >= 13, 
+                                "Aprobado", 
+                                "Desaprobado")
+            fig, ax = plt.subplots(figsize=(8, 5))
+            sns.countplot(
+                df_merge.loc[df_merge["Aula"]
+                            .isin(aulas_selecionadas3)],
+                x="Curso",
+                hue="Estado",
+                ax=ax
+            )
+            plt.xticks(rotation=60)
+            plt.tight_layout()
+            ax.set_title("Aprobados vs Desaprobados", 
+                            fontsize=16, 
+                            fontweight=800)
+            ax.set_xlabel("Cursos", 
+                            fontweight=700)
+            ax.set_ylabel("Conteo", 
+                            fontweight=700)
+            st.pyplot(fig)
+        else:
+            st.warning("Selecciona al menos una opción")
         """
     )
-    df_merge["Estado"] = np.where(df_merge["Nota"] >= 13, "Aprobado", "Desaprobado")
-    fig, ax = plt.subplots(figsize=(8, 5))
-    sns.countplot(df_merge, x="Curso", hue="Estado", ax=ax)
-    plt.xticks(rotation=60)
-    plt.tight_layout()
-    ax.set_title("Aprobados vs Desaprobados", fontsize=16, fontweight=800)
-    ax.set_xlabel("Cursos", fontweight=700)
-    ax.set_ylabel("Conteo", fontweight=700)
-    st.pyplot(fig)
+    aulas3 = sorted(df_merge["Aula"].unique().tolist())
+    aulas_selecionadas3 = st.multiselect(
+        "Selecciona Aula", options=aulas3, default=aulas3, key="Filtro_countplot"
+    )
+
+    if aulas_selecionadas3:
+        df_merge["Estado"] = np.where(df_merge["Nota"] >= 13, "Aprobado", "Desaprobado")
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.countplot(
+            df_merge.loc[df_merge["Aula"].isin(aulas_selecionadas3)],
+            x="Curso",
+            hue="Estado",
+            ax=ax
+        )
+        plt.xticks(rotation=60)
+        plt.tight_layout()
+        ax.set_title("Aprobados vs Desaprobados", fontsize=16, fontweight=800)
+        ax.set_xlabel("Cursos", fontweight=700)
+        ax.set_ylabel("Conteo", fontweight=700)
+        st.pyplot(fig)
+    else:
+        st.warning("Selecciona al menos una opción")
