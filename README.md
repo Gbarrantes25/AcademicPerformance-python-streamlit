@@ -1,4 +1,4 @@
-# Proyecto Análisis de Datos 💻
+# Academic Performances 💻
 ## 📃 Descripción General
 Proyecto de análisis y visualización de rendimiento académico desarrollado en Python con Streamlit, diseñado para explorar el desempeño de alumnos por curso, aula y periodo de manera interactiva.
 Este proyecto transforma un modelo de datos dimensional (calendario, alumnos, cursos y notas) en un dashboard visual mediante:
