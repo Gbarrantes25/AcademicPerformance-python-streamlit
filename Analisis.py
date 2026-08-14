@@ -193,7 +193,7 @@ with st.expander("Click para ver el contenido"):
     )
     st.dataframe(df_pivot)
 
-st.markdown("<h3>6. Distribución de Notas (Histograma)</h3>", unsafe_allow_html=True)
+st.markdown("<h3>6. Distribución de Notas (Histplot)</h3>", unsafe_allow_html=True)
 with st.expander("Click para ver el contenido"):
     st.code(
         """
@@ -239,21 +239,23 @@ with st.expander("Click para ver el contenido"):
         fig, ax = plt.subplots(figsize=(8, 5))
         sns.histplot(df_hist_filtrado, x="Nota", bins=10, ax=ax, kde=True, color="blue")
         ax.set_title(
-            "Distribución de Notas", fontdict={"fontsize": 16, "fontweight": 600}
+            "Distribución de Notas", fontdict={"fontsize": 16, "fontweight": 800}
         )
-        ax.set_ylabel("Cantidad", fontweight=600)
-        ax.set_xlabel("Notas", fontweight=600)
+        ax.set_ylabel("Cantidad", fontweight=700)
+        ax.set_xlabel("Notas", fontweight=700)
         plt.tight_layout()
         st.pyplot(fig)
     else:
         st.warning("Selecciona al menos una opción")
 
 st.markdown(
-    "<h3>7. Comparativo de Notas por Curso (Boxplot)</h3>", unsafe_allow_html=True
+    "<h3>7. Comparativo de Notas por Curso (Boxplot & Violinplot)</h3>",
+    unsafe_allow_html=True,
 )
 with st.expander("Click para ver el contenido"):
     st.code(
         """
+        # Boxplot
         fig, ax = plt.subplots(figsize=(8, 5))
         sns.boxplot(df_merge, 
                     x="Curso", 
@@ -268,6 +270,15 @@ with st.expander("Click para ver el contenido"):
                     fontsize=16)
         plt.tight_layout()
         st.pyplot(fig)
+
+        # Violinplot
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.violinplot(df_merge, x="Curso", y="Nota", inner="quartile", color="steelblue")
+        plt.xticks(rotation=60)
+        ax.set_ylabel("Notas", fontweight=700)
+        ax.set_xlabel("Cursos", fontweight=700)
+        plt.tight_layout()
+        st.pyplot(fig)
         """,
         language="python",
     )
@@ -275,9 +286,17 @@ with st.expander("Click para ver el contenido"):
     fig, ax = plt.subplots(figsize=(8, 5))
     sns.boxplot(df_merge, x="Curso", y="Nota", ax=ax, color="steelblue")
     plt.xticks(rotation=60)
-    ax.set_ylabel("Notas", fontweight=600)
-    ax.set_xlabel("Cursos", fontweight=600)
-    ax.set_title("Análisis de Notas por Curso", fontweight=600, fontsize=16)
+    ax.set_ylabel("Notas", fontweight=700)
+    ax.set_xlabel("Cursos", fontweight=700)
+    ax.set_title("Análisis de Notas por Curso", fontweight=800, fontsize=16)
+    plt.tight_layout()
+    st.pyplot(fig)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    sns.violinplot(df_merge, x="Curso", y="Nota", inner="quartile", color="steelblue")
+    plt.xticks(rotation=60)
+    ax.set_ylabel("Notas", fontweight=700)
+    ax.set_xlabel("Cursos", fontweight=700)
     plt.tight_layout()
     st.pyplot(fig)
 
@@ -306,9 +325,9 @@ with st.expander("Click para ver el contenido"):
 
     fig, ax = plt.subplots(figsize=(8, 8))
     sns.heatmap(df_pivot, ax=ax, cmap="RdYlGn", fmt=".1f", annot=True)
-    ax.set_title("Mapa de calor (Alumnos por Curso)", fontweight=600, fontsize=16)
-    ax.set_xlabel("Cursos", fontweight=600)
-    ax.set_ylabel("Alumnos", fontweight=600)
+    ax.set_title("Mapa de calor (Alumnos por Curso)", fontweight=800, fontsize=16)
+    ax.set_xlabel("Cursos", fontweight=700)
+    ax.set_ylabel("Alumnos", fontweight=700)
     plt.tight_layout()
     st.pyplot(fig)
 
@@ -359,12 +378,128 @@ with st.expander("Click para ver el contenido"):
             df_merge_filtrado.groupby("Id_Fecha").agg({"Nota": "mean"}).reset_index()
         )
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.lineplot(df_tiempo, x="Id_Fecha", y="Nota")
+        sns.lineplot(df_tiempo, x="Id_Fecha", y="Nota", ax=ax)
         plt.xticks(rotation=90)
-        ax.set_title("Tendencia de Notas", fontsize=16, fontweight=600)
-        ax.set_xlabel("Fechas", fontweight=600)
-        ax.set_ylabel("Notas", fontweight=600)
+        ax.set_title("Tendencia de Notas", fontsize=16, fontweight=800)
+        ax.set_xlabel("Fechas", fontweight=700)
+        ax.set_ylabel("Notas", fontweight=700)
         plt.tight_layout()
         st.pyplot(fig)
     else:
         st.warning("Selecciona al menos una opción")
+
+st.markdown("<h3>10. Ranking (Barplot)</h3>", unsafe_allow_html=True)
+with st.expander("Click para ver el contenido"):
+    st.code(
+        """
+        df_ranking = (
+            df_merge.groupby("Alumnos", sort=True)
+                    .agg({"Nota": "mean"})
+                    .sort_values(by="Nota", ascending=False)
+                    .head(10)
+                    )
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.barplot(df_ranking, 
+                    orient="h", 
+                    y="Alumnos", 
+                    x="Nota", 
+                    ax=ax, 
+                    color="steelblue")
+        ax.set_title("Top 10 Promedio Ponderado", 
+                    fontsize=16, 
+                    fontweight=800)
+        x.set_xlabel("Notas", 
+                    fontweight=700)
+        ax.set_ylabel("Alumnos", 
+                    fontweight=700)
+        plt.tight_layout()
+        st.pyplot(fig)
+        """
+    )
+    df_ranking = (
+        df_merge.groupby("Alumnos", sort=True)
+        .agg({"Nota": "mean"})
+        .sort_values(by="Nota", ascending=False)
+        .head(10)
+    )
+    fig, ax = plt.subplots(figsize=(8, 5))
+    sns.barplot(df_ranking, orient="h", y="Alumnos", x="Nota", ax=ax, color="steelblue")
+    ax.set_title("Top 10 Promedio Ponderado", fontsize=16, fontweight=800)
+    ax.set_xlabel("Notas", fontweight=700)
+    ax.set_ylabel("Alumnos", fontweight=700)
+    plt.tight_layout()
+    st.pyplot(fig)
+
+st.markdown("<h3>11. Relación Nota vs Edad (Regplot)</h3>", unsafe_allow_html=True)
+with st.expander("Click para ver el contenido"):
+    st.code(
+        """
+        fig, ax = plt.subplots(figsize=(8, 5))
+        df_regplot = (
+            df_merge.groupby(["Alumnos", "Edad"])
+                    .agg({"Nota": "mean"})
+                    .reset_index()
+        )
+
+        sns.regplot(df_regplot, 
+                    x="Nota", 
+                    y="Edad", 
+                    ax=ax, 
+                    logx=True, 
+                    color="steelblue")
+        ax.set_title("Edad vs Nota", 
+                    fontsize=16, 
+                    fontweight=800)
+        ax.set_xlabel("Notas", fontweight=700)
+        ax.set_ylabel("Edad", fontweight=700)
+        plt.tight_layout()
+        st.pyplot(fig)
+        """
+    )
+    fig, ax = plt.subplots(figsize=(8, 5))
+    df_regplot = (
+        df_merge.groupby(["Alumnos", "Edad"]).agg({"Nota": "mean"}).reset_index()
+    )
+
+    sns.regplot(df_regplot, x="Nota", y="Edad", ax=ax, logx=True, color="steelblue")
+    ax.set_title("Edad vs Nota", fontsize=16, fontweight=800)
+    ax.set_xlabel("Notas", fontweight=700)
+    ax.set_ylabel("Edad", fontweight=700)
+    plt.tight_layout()
+    st.pyplot(fig)
+
+st.markdown(
+    "<h3>12. Aprobados vs Desaprobados (Countplot)</h3>", unsafe_allow_html=True
+)
+with st.expander("Click para ver el contenido"):
+    st.code(
+        """
+        df_merge["Estado"] = np.where(df_merge["Nota"] >= 13, 
+                        "Aprobado", 
+                        "Desaprobado")
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.countplot(df_merge, 
+                        x="Curso", 
+                        hue="Estado", 
+                        ax=ax)
+        plt.xticks(rotation=60)
+        plt.tight_layout()
+        ax.set_title("Aprobados vs Desaprobados", 
+                        fontsize=16, 
+                        fontweight=800)
+        ax.set_xlabel("Cursos", 
+                        fontweight=700)
+        ax.set_ylabel("Conteo", 
+                        fontweight=700)
+        st.pyplot(fig)
+        """
+    )
+    df_merge["Estado"] = np.where(df_merge["Nota"] >= 13, "Aprobado", "Desaprobado")
+    fig, ax = plt.subplots(figsize=(8, 5))
+    sns.countplot(df_merge, x="Curso", hue="Estado", ax=ax)
+    plt.xticks(rotation=60)
+    plt.tight_layout()
+    ax.set_title("Aprobados vs Desaprobados", fontsize=16, fontweight=800)
+    ax.set_xlabel("Cursos", fontweight=700)
+    ax.set_ylabel("Conteo", fontweight=700)
+    st.pyplot(fig)
