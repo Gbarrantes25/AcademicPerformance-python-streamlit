@@ -5,6 +5,8 @@ import numpy as np
 import streamlit as st
 import inspect
 
+st.set_page_config(page_icon="📒",page_title="Academic Perfomance",layout="centered")
+
 st.header("Academic Perfomance 💻", width="stretch", text_alignment="center")
 st.markdown(
     """<p>El objetivo de este proyecto es elaborar un repositorio estructurado para el análisis del rendimiento académico y posterior visualización de datos.</p> <p>Librerías a usar: numpy, pandas, matplotlib, seaborn y streamlit.</p>
