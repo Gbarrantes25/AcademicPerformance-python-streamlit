@@ -130,7 +130,7 @@ El dashboard se abrirá automáticamente en tu navegador predeterminado en http:
 ## 💻 Funcionalidades y Código Clave
 El proyecto aprovecha las características modernas de Streamlit para optimizar el rendimiento y la mantenibilidad.
 
-###🚀 Caché de Datos (st.cache_data)
+### 🚀 Caché de Datos (st.cache_data)
 
 <details>
 <summary>Ver implementación de caché</summary>
@@ -174,7 +174,7 @@ def mostrar_grafico_aula(df):
 ```
 </details>
 
-📖 Documentación Embebida (inspect.getsource)
+### 📖 Documentación Embebida (inspect.getsource)
 <details>
 <summary>Ver implementación de documentación</summary>
 
